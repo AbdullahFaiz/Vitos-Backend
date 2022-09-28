@@ -1,5 +1,6 @@
 package com.synergen.vitos.repository;
 
+import com.synergen.vitos.model.Category;
 import com.synergen.vitos.model.Pizza;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -10,5 +11,6 @@ public interface PizzaRepository extends JpaRepository<Pizza, Long>{
 	public Pizza findByPizzaId(long pizzaId);
 	public Pizza findByCode(String code);
 	public List<Pizza> findByStatus(String status);
+	public List<Pizza> findByCategory(Category category);
 
 }

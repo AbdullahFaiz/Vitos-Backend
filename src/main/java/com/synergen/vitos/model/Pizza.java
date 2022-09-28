@@ -17,6 +17,9 @@ public class Pizza extends BaseData {
 	private Category category;
 	private String status;
 	private String imgURL;
+	private double unitPrice;
+	private int quantity;
+
 
 
 	public long getPizzaId() {
@@ -53,6 +56,21 @@ public class Pizza extends BaseData {
 	public void setImgURL(String imgURL) {
 		this.imgURL = imgURL;
 	}
-	
+
+	public double getUnitPrice() {
+		return unitPrice;
+	}
+
+	public void setUnitPrice(double unitPrice) {
+		this.unitPrice = unitPrice;
+	}
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
 	
 }

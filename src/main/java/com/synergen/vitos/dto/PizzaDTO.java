@@ -1,41 +1,28 @@
 package com.synergen.vitos.dto;
 
+import com.synergen.vitos.model.Category;
+import com.synergen.vitos.model.Pizza;
+
+import java.util.List;
+
 public class PizzaDTO {
 
-	private long pizzaId;
-	private String code;
-	private String description;
-	private String status;
-	private String imgURL;
-	
-	public long getPizzaId() {
-		return pizzaId;
+	private Category category;
+	private List<Pizza> pizza;
+
+	public Category getCategory() {
+		return category;
 	}
-	public void setPizzaId(long pizzaId) {
-		this.pizzaId = pizzaId;
+
+	public void setCategory(Category category) {
+		this.category = category;
 	}
-	public String getCode() {
-		return code;
+
+	public List<Pizza> getPizza() {
+		return pizza;
 	}
-	public void setCode(String code) {
-		this.code = code;
-	}
-	public String getDescription() {
-		return description;
-	}
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	public String getStatus() {
-		return status;
-	}
-	public void setStatus(String status) {
-		this.status = status;
-	}
-	public String getImgURL() {
-		return imgURL;
-	}
-	public void setImgURL(String imgURL) {
-		this.imgURL = imgURL;
+
+	public void setPizza(List<Pizza> pizza) {
+		this.pizza = pizza;
 	}
 }

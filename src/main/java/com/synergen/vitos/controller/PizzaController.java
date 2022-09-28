@@ -1,5 +1,6 @@
 package com.synergen.vitos.controller;
 
+import com.synergen.vitos.dto.PizzaByCategoryResponse;
 import com.synergen.vitos.dto.PizzaDTO;
 import com.synergen.vitos.dto.PizzaResponse;
 import com.synergen.vitos.dto.ValidationError;
@@ -42,7 +43,10 @@ public class PizzaController {
                     pizza.setCategory(checkCategory);
                     pizza.setCode(pizza.getCode());
                     pizza.setDescription(pizza.getDescription());
+                    pizza.setImgURL(pizza.getImgURL());
                     pizza.setStatus(pizza.getStatus());
+                    pizza.setUnitPrice(pizza.getUnitPrice());
+                    pizza.setQuantity(pizza.getQuantity());
 
                     pizzaRepository.save(pizza);
 
@@ -91,5 +95,58 @@ public class PizzaController {
         return response;
     }
 
+    @GetMapping("/category/{categoryID}")
+    public PizzaResponse getPizzasByCategory(ServletRequest request, @PathVariable("categoryID") long categoryID){
+        PizzaResponse response = new PizzaResponse();
+        List<ValidationError> errorList = new ArrayList<ValidationError>();
+        try{
 
+            Category category = categoryRepository.findByCategoryId(categoryID);
+            if(category != null) {
+                List<Pizza> pizzaList = pizzaRepository.findByCategory(category);
+                response.setResponseData(pizzaList);
+                response.setCode(ResponseEnum.SUCCESS.getCode());
+                response.setMessage(ResponseEnum.SUCCESS.getMessage());
+            }else{
+
+                ValidationError error = new ValidationError();
+                error.setKey("category");
+                error.setMessage(ValidationErrorEnum.NOT_FOUND.getMessage());
+                errorList.add(error);
+
+                response.setCode(ResponseEnum.VALIDATION_ERROR.getCode());
+                response.setMessage(ResponseEnum.VALIDATION_ERROR.getMessage());
+//                response.setValidationError(error);
+            }
+        }catch(Exception ex){
+            response.setCode(ResponseEnum.SOMETHING_WENT_WRONG.getCode());
+            response.setMessage(ex.getLocalizedMessage());
+        }
+        return response;
+    }
+
+    @GetMapping("/category-wise")
+    public PizzaByCategoryResponse getCategoryWisePizza() {
+        PizzaByCategoryResponse response = new PizzaByCategoryResponse();
+        List<PizzaDTO> responseData = new ArrayList<PizzaDTO>();
+        try {
+
+            List<Category> categories = categoryRepository.findAll();
+            for (Category category : categories) {
+                List<Pizza> pizzaList = pizzaRepository.findByCategory(category);
+                PizzaDTO pizzaDTO = new PizzaDTO();
+                pizzaDTO.setPizza(pizzaList);
+                pizzaDTO.setCategory(category);
+                responseData.add(pizzaDTO);
+            }
+
+            response.setResponseData(responseData);
+            response.setCode(ResponseEnum.SUCCESS.getCode());
+            response.setMessage(ResponseEnum.SUCCESS.getMessage());
+        } catch (Exception e) {
+            response.setCode(ResponseEnum.SOMETHING_WENT_WRONG.getCode());
+            response.setMessage(e.getLocalizedMessage());
+        }
+        return response;
+    }
 }
