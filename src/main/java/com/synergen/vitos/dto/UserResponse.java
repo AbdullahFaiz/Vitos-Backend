@@ -9,6 +9,7 @@ public class UserResponse {
 	private int code;
 	private String message;
 	private List<User> user;
+	private User regUser;
 	private List<ValidationError> validationErrors;
 
 
@@ -34,6 +35,14 @@ public class UserResponse {
 
 	public void setUser(List<User> user) {
 		this.user = user;
+	}
+
+	public User getRegUser() {
+		return regUser;
+	}
+
+	public void setRegUser(User regUser) {
+		this.regUser = regUser;
 	}
 
 	public List<ValidationError> getValidationErrors() {

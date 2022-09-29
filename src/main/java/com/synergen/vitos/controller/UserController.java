@@ -39,9 +39,13 @@ public class UserController {
             if(userObj == null){
                 user.setPassword(ps.encrypt(user.getPassword()));
                 user.setStatus(RecordStatusEnum.ACTIVE.getCode());
-                userRepository.save(user);
+                User resigteredUser = userRepository.save(user);
+
+
                 response.setCode(ResponseEnum.SUCCESS.getCode());
                 response.setMessage(ResponseEnum.SUCCESS.getMessage());
+                response.setRegUser(resigteredUser);
+
             }else{
                 response.setCode(ResponseEnum.VALIDATION_ERROR.getCode());
                 response.setMessage(ResponseEnum.VALIDATION_ERROR.getMessage());
