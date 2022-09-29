@@ -35,8 +35,9 @@ public class CategoryService {
                 category.setDescription(category.getDescription());
                 category.setStatus(category.getStatus());
 
-                categoryRepository.save(category);
+                Category savedCategory = categoryRepository.save(category);
 
+                response.setCreatedCategory(savedCategory);
                 response.setCode(ResponseEnum.SUCCESS.getCode());
                 response.setMessage(ResponseEnum.SUCCESS.getMessage());
             }else{

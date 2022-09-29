@@ -9,6 +9,7 @@ public class CategoryResponse {
 	private int code;
 	private String message;
 	private List<Category> responseData;
+	private Category createdCategory;
 	private List<ValidationError> validationErrors;
 	
 	public int getCode() {
@@ -35,6 +36,12 @@ public class CategoryResponse {
 	public void setValidationErrors(List<ValidationError> validationErrors) {
 		this.validationErrors = validationErrors;
 	}
-	
-	
+
+	public Category getCreatedCategory() {
+		return createdCategory;
+	}
+
+	public void setCreatedCategory(Category createdCategory) {
+		this.createdCategory = createdCategory;
+	}
 }
