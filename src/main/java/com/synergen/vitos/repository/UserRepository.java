@@ -7,9 +7,6 @@ import java.util.List;
 
 public interface UserRepository extends JpaRepository<User, Long>{
 
-	public List<User> findByStatus(String status);
-
-	public User findByUserId(long userId);
 
 	public User findByContactNo(String contactNo);
 }

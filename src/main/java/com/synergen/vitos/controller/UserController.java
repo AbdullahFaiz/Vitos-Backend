@@ -1,7 +1,10 @@
 package com.synergen.vitos.controller;
 
+import com.synergen.vitos.dto.LoginDTO;
+import com.synergen.vitos.dto.LoginResponse;
 import com.synergen.vitos.dto.UserResponse;
 import com.synergen.vitos.dto.ValidationError;
+import com.synergen.vitos.enums.RecordStatusEnum;
 import com.synergen.vitos.enums.ResponseEnum;
 import com.synergen.vitos.enums.ValidationErrorEnum;
 import com.synergen.vitos.model.User;
@@ -11,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +38,7 @@ public class UserController {
 
             if(userObj == null){
                 user.setPassword(ps.encrypt(user.getPassword()));
+                user.setStatus(RecordStatusEnum.ACTIVE.getCode());
                 userRepository.save(user);
                 response.setCode(ResponseEnum.SUCCESS.getCode());
                 response.setMessage(ResponseEnum.SUCCESS.getMessage());
@@ -81,5 +86,39 @@ public class UserController {
         return response;
     }
 
+    @PostMapping("/login")
+    public LoginResponse authenticate(ServletRequest request, @RequestBody LoginDTO loginDTO, HttpServletResponse resp){
+        LoginResponse response = new LoginResponse();
+        List<ValidationError> errorList = new ArrayList<ValidationError>();
+        PasswordService passwordService = new PasswordService();
 
+        System.out.println("### PW: " + passwordService.encrypt(loginDTO.getPassword()));
+        try {
+            User user = userRepository.findByContactNo(loginDTO.getContactNo());
+            if (user != null) {
+                if (user.getStatus().equals(RecordStatusEnum.ACTIVE.getCode())) {
+                    if (passwordService.decrypt(user.getPassword()).equals(loginDTO.getPassword())) {
+
+                        response.setUser(user);
+                        response.setCode(ResponseEnum.SUCCESS.getCode());
+                        response.setMessage(ResponseEnum.SUCCESS.getMessage());
+                    }else{
+                        response.setCode(ResponseEnum.PASSWORD_INCORRECT.getCode());
+                        response.setMessage(ResponseEnum.PASSWORD_INCORRECT.getMessage());
+                    }
+                }else{
+                    response.setCode(ResponseEnum.INACTIVE_LOGIN.getCode());
+                    response.setMessage(ResponseEnum.INACTIVE_LOGIN.getMessage());
+                }
+            }else{
+                response.setCode(ResponseEnum.USERNAME_NOT_FOUND.getCode());
+                response.setMessage(ResponseEnum.USERNAME_NOT_FOUND.getMessage());
+            }
+        } catch (Exception e) {
+            response.setCode(ResponseEnum.SOMETHING_WENT_WRONG.getCode());
+            response.setMessage(ResponseEnum.SOMETHING_WENT_WRONG.getMessage());
+        }
+//        response.setValidationErrors(errorList);
+        return response;
+    }
 }
